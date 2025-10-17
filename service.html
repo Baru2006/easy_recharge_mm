@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Our Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #222222;
+            --accent-color: #ff7b00;
+            --border-color: #e5e5e5;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px 0; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); background-color: white; padding-left: 5%; padding-right: 5%;}
+        header .logo { font-size: 1.8em; font-weight: 700; color: var(--accent-color); text-decoration: none; }
+        main { flex-grow: 1; }
+        .page-header { text-align: center; margin: 40px 0; }
+        .page-header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .page-header p { font-size: 1.1em; color: #666; max-width: 600px; margin: 0 auto; }
+        .service-category { margin-bottom: 50px; }
+        .service-category h2 { font-size: 2em; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 30px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .service-card { background-color: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: var(--card-shadow); transition: transform 0.2s, box-shadow 0.2s; }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .service-card h3 { margin-top: 0; color: var(--accent-color); font-size: 1.3em; }
+        .service-card p { color: #555; line-height: 1.6; }
+        .service-card .price { font-weight: 600; font-size: 1.1em; margin-top: 15px; }
+        footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border-color); font-size: 0.9em; color: #777; background-color: white; }
+        footer a { color: #555; text-decoration: none; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">EasyRecharge MM</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Our Services</h1>
+            <p>We provide fast and reliable digital services for your convenience. Explore our offerings below.</p>
+        </div>
+
+        <section class="service-category">
+            <h2>📱 SIM Top-Up</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>MPT Top-Up</h3>
+                    <p>Instantly recharge any MPT number. Fast and secure transactions.</p>
+                    <div class="price">Starts from: 1,000 MMK</div>
+                </div>
+                <div class="service-card">
+                    <h3>Ooredoo Top-Up</h3>
+                    <p>Quick and easy top-up for all Ooredoo Myanmar subscribers.</p>
+                    <div class="price">Starts from: 1,000 MMK</div>
+                </div>
+                <div class="service-card">
+                    <h3>Telenor (Atom) Top-Up</h3>
+                    <p>Recharge your Atom (formerly Telenor) account in just a few clicks.</p>
+                    <div class="price">Starts from: 1,000 MMK</div>
+                </div>
+                 <div class="service-card">
+                    <h3>MyTel Top-Up</h3>
+                    <p>Conveniently top-up any MyTel number anytime, anywhere.</p>
+                    <div class="price">Starts from: 1,000 MMK</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-category">
+            <h2>🎮 Game Recharge</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Mobile Legends Diamonds</h3>
+                    <p>Get your Mobile Legends diamonds instantly and get back to the game.</p>
+                    <div class="price">Sample: 100 💎 for 2,500 MMK</div>
+                </div>
+                <div class="service-card">
+                    <h3>PUBG Mobile UC</h3>
+                    <p>Purchase PUBG Mobile UC to get your favorite skins and items.</p>
+                    <div class="price">Sample: 60 UC for 1,500 MMK</div>
+                </div>
+                <div class="service-card">
+                    <h3>More Games Coming Soon</h3>
+                    <p>We are constantly expanding our game recharge options. Stay tuned!</p>
+                    <div class="price">TBA</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-category">
+            <h2>📈 SMM Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Facebook Page Likes</h3>
+                    <p>Boost your Facebook page's credibility with high-quality page likes.</p>
+                    <div class="price">Sample: 100 Likes for 5,000 MMK</div>
+                </div>
+                <div class="service-card">
+                    <h3>Instagram Followers</h3>
+                    <p>Increase your Instagram presence and reach with real followers.</p>
+                    <div class="price">Sample: 100 Followers for 5,000 MMK</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © EasyRecharge MM 2025 | 
+        <a href="index.html">Home</a> | 
+        <a href="faq.html">FAQ</a> | 
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="services.html">Other</a>
+    </footer>
+
+</body>
+</html>
+
