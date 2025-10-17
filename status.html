@@ -1,0 +1,308 @@
+<!-- status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Live - EasyRecharge MM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #ff7b00;
+            --bg: #ffffff;
+            --text: #222;
+            --border: #e5e5e5;
+            --pending: #999;
+            --success: #00cc66;
+            --failed: #ff3333;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fb;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        header .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        header p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 92%;
+            margin: 30px auto;
+        }
+
+        .table-container {
+            background-color: var(--bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .table-container h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        thead tr {
+            background-color: var(--accent);
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f3f3f3;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: capitalize;
+        }
+
+        .status-pending { background-color: var(--pending); }
+        .status-success { background-color: var(--success); }
+        .status-failed { background-color: var(--failed); }
+
+        #lastUpdatedOrders, #lastUpdatedPayments {
+            text-align: right;
+            font-size: 0.8em;
+            color: #777;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 30px;
+            font-style: italic;
+            color: #888;
+        }
+
+        .error { color: var(--failed); }
+
+        footer {
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 0.9em;
+            color: #777;
+            border-top: 1px solid var(--border);
+            background-color: var(--bg);
+        }
+
+        footer a {
+            color: #555;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            th, td { font-size: 12px; padding: 8px; }
+            .table-container { padding: 15px; }
+            header .logo { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">EasyRecharge MM</a>
+        <p>📊 Live Status Dashboard — Updated Automatically</p>
+    </header>
+
+    <main class="container">
+        <div class="table-container">
+            <h2>📦 Order Status</h2>
+            <p id="lastUpdatedOrders"></p>
+            <div class="table-wrapper">
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>User ID</th>
+                            <th>Category</th>
+                            <th>Service</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersBody">
+                        <tr><td colspan="6" class="loading">Loading order data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>💸 Pay-to-Pay Status</h2>
+            <p id="lastUpdatedPayments"></p>
+            <div class="table-wrapper">
+                <table id="paymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>User ID</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Amount Sent</th>
+                            <th>Amount Received</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsBody">
+                        <tr><td colspan="7" class="loading">Loading payment data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © EasyRecharge MM 2025 |
+        <a href="index.html">Home</a> |
+        <a href="faq.html">FAQ</a> |
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="services.html">Other</a>
+    </footer>
+
+    <script>
+        const GITHUB_USERNAME = "Baru2006";
+        const REPO_NAME = "order_tracker";
+        const DATA_FILE_PATH = "data.json";
+        const DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${DATA_FILE_PATH}`;
+        const REFRESH_INTERVAL = 1 * 60 * 1000; // 1 minute refresh
+
+        const ordersBody = document.getElementById('ordersBody');
+        const paymentsBody = document.getElementById('paymentsBody');
+        const lastUpdatedOrdersEl = document.getElementById('lastUpdatedOrders');
+        const lastUpdatedPaymentsEl = document.getElementById('lastUpdatedPayments');
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`${DATA_URL}?t=${Date.now()}`);
+                if (!response.ok) throw new Error(`Failed: ${response.status}`);
+                const data = await response.json();
+                populateOrdersTable(data.orders);
+                populatePaymentsTable(data.payments);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                const err = `<tr><td colspan="7" class="error">⚠️ Failed to load data.</td></tr>`;
+                ordersBody.innerHTML = err;
+                paymentsBody.innerHTML = err;
+            }
+        }
+
+        function populateOrdersTable(orders) {
+            ordersBody.innerHTML = '';
+            if (!orders || !orders.length) {
+                ordersBody.innerHTML = `<tr><td colspan="6" class="loading">No orders found.</td></tr>`;
+                return;
+            }
+            orders.reverse().forEach(o => {
+                const date = new Date(o.Date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+                const status = o.Status?.toLowerCase() || 'pending';
+                ordersBody.innerHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${o.UserID}</td>
+                        <td>${o.Category}</td>
+                        <td>${o.Service}</td>
+                        <td>${o.Total}</td>
+                        <td><span class="status-badge status-${status}">${o.Status}</span></td>
+                    </tr>`;
+            });
+            updateTimestamp(lastUpdatedOrdersEl);
+        }
+
+        function populatePaymentsTable(payments) {
+            paymentsBody.innerHTML = '';
+            if (!payments || !payments.length) {
+                paymentsBody.innerHTML = `<tr><td colspan="7" class="loading">No payments found.</td></tr>`;
+                return;
+            }
+            payments.reverse().forEach(p => {
+                const date = new Date(p.Date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+                const status = p.Status?.toLowerCase() || 'pending';
+                paymentsBody.innerHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${p.UserID}</td>
+                        <td>${p.From}</td>
+                        <td>${p.To}</td>
+                        <td>${p.AmountSent}</td>
+                        <td>${p.AmountReceived || 'N/A'}</td>
+                        <td><span class="status-badge status-${status}">${p.Status}</span></td>
+                    </tr>`;
+            });
+            updateTimestamp(lastUpdatedPaymentsEl);
+        }
+
+        function updateTimestamp(el) {
+            el.textContent = "Last updated: " + new Date().toLocaleTimeString('en-US');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+            setInterval(fetchData, REFRESH_INTERVAL);
+        });
+    </script>
+</body>
+</html>
