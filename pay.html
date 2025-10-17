@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - P2P Exchange</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #222222;
+            --accent-color: #ff7b00;
+            --border-color: #e5e5e5;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 90%; max-width: 800px; margin: 0 auto; padding: 20px 0; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); }
+        header .logo { font-size: 1.8em; font-weight: 700; color: var(--accent-color); text-decoration: none; }
+        main { flex-grow: 1; }
+        .form-container { background-color: #fff; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); margin-top: 20px; }
+        .form-container h1 { margin-top: 0; font-size: 1.8em; text-align: center; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; box-sizing: border-box; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2); }
+        .calculation-display { background-color: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .calculation-display p { margin: 5px 0; display: flex; justify-content: space-between; }
+        .calculation-display span { font-weight: 600; }
+        .submit-btn { width: 100%; padding: 15px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+        .submit-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border-color); font-size: 0.9em; color: #777; }
+        footer a { color: #555; text-decoration: none; margin: 0 10px; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #28a745; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        .toast.show { opacity: 1; visibility: visible; }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <a href="index.html" class="logo">EasyRecharge MM</a>
+    </header>
+
+    <main class="container">
+        <div class="form-container">
+            <h1>P2P Money Exchange</h1>
+            <form id="p2pForm">
+                <div class="form-group">
+                    <label for="userId">Your ID</label>
+                    <input type="text" id="userId" name="userId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">Your Phone Info</label>
+                    <input type="text" id="userPhone" name="userPhone" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="fromPayment">From Payment</label>
+                    <select id="fromPayment" name="fromPayment" required>
+                        <option value="">-- Select Method --</option>
+                        <option value="Wave">Wave</option>
+                        <option value="KBZPay">KBZPay</option>
+                        <option value="AYA">AYA</option>
+                        <option value="CBPay">CBPay</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="toPayment">To Payment</label>
+                    <select id="toPayment" name="toPayment" required>
+                        <option value="">-- Select Method --</option>
+                        <option value="Wave">Wave</option>
+                        <option value="KBZPay">KBZPay</option>
+                        <option value="AYA">AYA</option>
+                        <option value="CBPay">CBPay</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amountSent">Amount You Sent (MMK)</label>
+                    <input type="number" id="amountSent" name="amountSent" min="1" placeholder="e.g., 50000" required>
+                </div>
+                <div class="form-group">
+                    <label>Calculation</label>
+                    <div class="calculation-display">
+                        <p>Fee (MMK): <span id="feeDisplay">0</span></p>
+                        <p>You Will Receive (MMK): <span id="receiveDisplay" style="color: var(--accent-color);">0</span></p>
+                    </div>
+                </div>
+              <div class="form-group">
+    <label for="receiverPhone">Our Phone Number</label>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="receiverPhone" value="09-123456789" readonly style="flex: 1;">
+        <button type="button" onclick="copyPhone()" style="background-color: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer;">Copy</button>
+    </div>
+              </div>
+                <div class="form-group">
+                    <label for="transactionId">Your Sending Transaction ID</label>
+                    <input type="text" id="transactionId" name="transactionId" placeholder="Enter your payment transaction ID" required>
+                </div>
+                <button type="submit" id="submitBtn" class="submit-btn" disabled>Submit Exchange</button>
+            </form>
+        </div>
+    </main>
+    
+    <div id="toast" class="toast"></div>
+
+    <footer>
+        © EasyRecharge MM 2025 | 
+        <a href="index.html">Home</a> | 
+        <a href="faq.html">FAQ</a> | 
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="services.html">Other</a>
+    </footer>
+
+    <script>
+        const GAS_URL = 'YOUR_GAS_DEPLOYMENT_URL';
+
+        // --- User ID and Phone ---
+        function generateUserId() {
+            const id = Math.floor(100000000 + Math.random() * 900000000);
+            localStorage.setItem('easyRechargeUserId', id);
+            return id;
+        }
+        function detectPhone() {
+            if (/Android/i.test(navigator.userAgent)) return "Android Device User";
+            if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) return "iOS Device User";
+            return "Web User";
+        }
+        const uid = localStorage.getItem('easyRechargeUserId') || generateUserId();
+        document.getElementById('userId').value = uid;
+        document.getElementById('userPhone').value = detectPhone();
+        
+        // --- Form Logic ---
+        const form = document.getElementById('p2pForm');
+        const amountSentInput = document.getElementById('amountSent');
+        const feeDisplay = document.getElementById('feeDisplay');
+        const receiveDisplay = document.getElementById('receiveDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function calculateExchange() {
+            const amount = parseFloat(amountSentInput.value) || 0;
+            let fee = 0;
+            let receive = 0;
+
+            if (amount > 0) {
+                if (amount >= 10000) {
+                    fee = amount * 0.03;
+                } else {
+                    fee = 200;
+                }
+                receive = amount - fee;
+            }
+            
+            feeDisplay.textContent = fee.toLocaleString();
+            receiveDisplay.textContent = receive.toLocaleString();
+            validateForm();
+        }
+
+        function validateForm() {
+            const isValid = form.checkValidity();
+            submitBtn.disabled = !isValid;
+        }
+
+        amountSentInput.addEventListener('input', calculateExchange);
+        form.addEventListener('input', validateForm);
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const formData = new FormData(form);
+            const data = {
+                type: 'p2p',
+                userId: formData.get('userId'),
+                userPhone: formData.get('userPhone'),
+                fromPayment: formData.get('fromPayment'),
+                toPayment: formData.get('toPayment'),
+                amountSent: formData.get('amountSent'),
+                amountReceive: receiveDisplay.textContent.replace(/,/g, ''),
+                transactionId: formData.get('transactionId')
+            };
+
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                showToast('✅ Exchange Request Sent!');
+                form.reset();
+                calculateExchange();
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('❌ Error submitting request.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Exchange';
+                validateForm();
+            }
+        });
+        
+        validateForm();
+
+      function copyPhone() {
+    const phoneInput = document.getElementById('receiverPhone');
+    phoneInput.select();
+    phoneInput.setSelectionRange(0, 99999); // for mobile compatibility
+    navigator.clipboard.writeText(phoneInput.value);
+    showToast(' Phone number copied!');
+      }
+    </script>
+</body>
+</html>
+
+                  
