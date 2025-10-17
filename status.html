@@ -223,86 +223,87 @@
         <a href="services.html">Other</a>
     </footer>
 
-    <script>
-        const GITHUB_USERNAME = "Baru2006";
-        const REPO_NAME = "order_tracker";
-        const DATA_FILE_PATH = "data.json";
-        const DATA_URL = `https://raw.githubusercontent.com/Baru2006/order_tracker/main/data.json`;
-        const REFRESH_INTERVAL = 1 * 60 * 1000; // 1 minute refresh
+<script>
+const GITHUB_USERNAME = "Baru2006";
+const REPO_NAME = "easy_recharge_mm";
+const DATA_URL = `https://raw.githubusercontent.com/Baru2006/order_tracker/main/data.json`;
+const REFRESH_INTERVAL = 1 * 60 * 1000; // 1 min
 
-        const ordersBody = document.getElementById('ordersBody');
-        const paymentsBody = document.getElementById('paymentsBody');
-        const lastUpdatedOrdersEl = document.getElementById('lastUpdatedOrders');
-        const lastUpdatedPaymentsEl = document.getElementById('lastUpdatedPayments');
+const ordersBody = document.getElementById('ordersBody');
+const paymentsBody = document.getElementById('paymentsBody');
+const lastUpdatedOrdersEl = document.getElementById('lastUpdatedOrders');
+const lastUpdatedPaymentsEl = document.getElementById('lastUpdatedPayments');
 
-        async function fetchData() {
-            try {
-                const response = await fetch(`${DATA_URL}?t=${Date.now()}`);
-                if (!response.ok) throw new Error(`Failed: ${response.status}`);
-                const data = await response.json();
-                populateOrdersTable(data.orders);
-                populatePaymentsTable(data.payments);
-            } catch (error) {
-                console.error("Fetch error:", error);
-                const err = `<tr><td colspan="7" class="error">⚠️ Failed to load data.</td></tr>`;
-                ordersBody.innerHTML = err;
-                paymentsBody.innerHTML = err;
-            }
-        }
+async function fetchData() {
+  try {
+    const response = await fetch(`${DATA_URL}?t=${Date.now()}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!response.ok) throw new Error(`Failed: ${response.status}`);
+    const data = await response.json();
+    populateOrdersTable(data.orders || data.Orders);
+    populatePaymentsTable(data.payments || data.Payments);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    const err = `<tr><td colspan="7" class="error">⚠️ Failed to load data.</td></tr>`;
+    ordersBody.innerHTML = err;
+    paymentsBody.innerHTML = err;
+  }
+}
 
-        function populateOrdersTable(orders) {
-            ordersBody.innerHTML = '';
-            if (!orders || !orders.length) {
-                ordersBody.innerHTML = `<tr><td colspan="6" class="loading">No orders found.</td></tr>`;
-                return;
-            }
-            orders.reverse().forEach(o => {
-                const date = new Date(o.Date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
-                const status = o.Status?.toLowerCase() || 'pending';
-                ordersBody.innerHTML += `
-                    <tr>
-                        <td>${date}</td>
-                        <td>${o.UserID}</td>
-                        <td>${o.Category}</td>
-                        <td>${o.Service}</td>
-                        <td>${o.Total}</td>
-                        <td><span class="status-badge status-${status}">${o.Status}</span></td>
-                    </tr>`;
-            });
-            updateTimestamp(lastUpdatedOrdersEl);
-        }
+function populateOrdersTable(orders) {
+  ordersBody.innerHTML = '';
+  if (!orders || !orders.length) {
+    ordersBody.innerHTML = `<tr><td colspan="6" class="loading">No orders found.</td></tr>`;
+    return;
+  }
+  orders.reverse().forEach(o => {
+    const date = new Date(o.Date || o.date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+    const status = (o.Status || o.status || 'Pending').toLowerCase();
+    ordersBody.innerHTML += `
+      <tr>
+        <td>${date}</td>
+        <td>${o.UserID || o.userId}</td>
+        <td>${o.Category || o.category}</td>
+        <td>${o.Service || o.service}</td>
+        <td>${o.Total || o.totalPrice || '0'} MMK</td>
+        <td><span class="status-badge status-${status}">${o.Status || o.status}</span></td>
+      </tr>`;
+  });
+  updateTimestamp(lastUpdatedOrdersEl);
+}
 
-        function populatePaymentsTable(payments) {
-            paymentsBody.innerHTML = '';
-            if (!payments || !payments.length) {
-                paymentsBody.innerHTML = `<tr><td colspan="7" class="loading">No payments found.</td></tr>`;
-                return;
-            }
-            payments.reverse().forEach(p => {
-                const date = new Date(p.Date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
-                const status = p.Status?.toLowerCase() || 'pending';
-                paymentsBody.innerHTML += `
-                    <tr>
-                        <td>${date}</td>
-                        <td>${p.UserID}</td>
-                        <td>${p.From}</td>
-                        <td>${p.To}</td>
-                        <td>${p.AmountSent}</td>
-                        <td>${p.AmountReceived || 'N/A'}</td>
-                        <td><span class="status-badge status-${status}">${p.Status}</span></td>
-                    </tr>`;
-            });
-            updateTimestamp(lastUpdatedPaymentsEl);
-        }
+function populatePaymentsTable(payments) {
+  paymentsBody.innerHTML = '';
+  if (!payments || !payments.length) {
+    paymentsBody.innerHTML = `<tr><td colspan="7" class="loading">No payments found.</td></tr>`;
+    return;
+  }
+  payments.reverse().forEach(p => {
+    const date = new Date(p.Date || p.date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+    const status = (p.Status || p.status || 'Pending').toLowerCase();
+    paymentsBody.innerHTML += `
+      <tr>
+        <td>${date}</td>
+        <td>${p.UserID || p.userId}</td>
+        <td>${p.From || p.from}</td>
+        <td>${p.To || p.to}</td>
+        <td>${p.AmountSent || p.sent}</td>
+        <td>${p.AmountReceived || p.receive || 'N/A'}</td>
+        <td><span class="status-badge status-${status}">${p.Status || p.status}</span></td>
+      </tr>`;
+  });
+  updateTimestamp(lastUpdatedPaymentsEl);
+}
 
-        function updateTimestamp(el) {
-            el.textContent = "Last updated: " + new Date().toLocaleTimeString('en-US');
-        }
+function updateTimestamp(el) {
+  el.textContent = "Last updated: " + new Date().toLocaleTimeString('en-US');
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchData();
-            setInterval(fetchData, REFRESH_INTERVAL);
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', () => {
+  fetchData();
+  setInterval(fetchData, REFRESH_INTERVAL);
+});
+</script>
 </body>
 </html>
