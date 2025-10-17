@@ -8,6 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/easy_recharge_mm/manifest.json">
+<meta name="theme-color" content="#ff7b00">
+<link rel="apple-touch-icon" href="/easy_recharge_mm/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/easy_recharge_mm/service-worker.js')
+      .then(() => console.log('Service Worker registered'))
+      .catch(console.error);
+  }
+</script>
   <style>
     :root {
       --bg-color: #ffffff;
