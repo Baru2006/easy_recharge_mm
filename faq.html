@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - FAQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #222222;
+            --accent-color: #ff7b00;
+            --border-color: #e5e5e5;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 90%; max-width: 900px; margin: 0 auto; padding: 20px 0; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); background-color: white; padding-left: 5%; padding-right: 5%;}
+        header .logo { font-size: 1.8em; font-weight: 700; color: var(--accent-color); text-decoration: none; }
+        main { flex-grow: 1; padding: 40px 0; }
+        h1 { text-align: center; font-size: 2.5em; margin-bottom: 40px; }
+        .accordion { max-width: 800px; margin: 0 auto; }
+        .accordion-item { background-color: white; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 15px; overflow: hidden; }
+        .accordion-header { padding: 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .accordion-header::after { content: '+'; font-size: 1.5em; color: var(--accent-color); transition: transform 0.3s; }
+        .accordion-item.active .accordion-header::after { transform: rotate(45deg); }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-content { padding: 0 20px 20px; color: #555; line-height: 1.7; border-top: 1px solid var(--border-color); }
+        footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border-color); font-size: 0.9em; color: #777; background-color: white; }
+        footer a { color: #555; text-decoration: none; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">EasyRecharge MM</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Frequently Asked Questions</h1>
+        <div class="accordion">
+            <div class="accordion-item">
+                <div class="accordion-header">How to order a service?</div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Go to the "Order Form" page. Select the category and service you need, specify the quantity, choose your payment method, and provide the transaction ID from your payment. Finally, click "Submit Order".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">How long does delivery take?</div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Most orders are processed within 5 to 15 minutes. During peak hours, it might take up to 30 minutes. You can check the live status of your order on the "Status Live" page.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">What payment methods are supported?</div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>We currently accept payments via Wave, KBZPay, AYA Pay, and CB Pay. More options may be added in the future.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">How do I perform a P2P exchange?</div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>Navigate to the "Exchange Money" page. Select the payment method you are sending from and the one you want to receive to. Enter the amount you sent, and the system will calculate the fee and the amount you'll receive. Enter your transaction ID and submit the request.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">How can I contact support?</div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <p>For any issues or inquiries, please contact our support team via email at support@easyrecharge.mm. We'll get back to you as soon as possible.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © EasyRecharge MM 2025 | 
+        <a href="index.html">Home</a> | 
+        <a href="faq.html">FAQ</a> | 
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="services.html">Other</a>
+    </footer>
+
+    <script>
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            const body = item.querySelector('.accordion-body');
+            const content = item.querySelector('.accordion-content');
+
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                accordionItems.forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.accordion-body').style.maxHeight = null;
+                });
+
+                // Open the clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    body.style.maxHeight = content.scrollHeight + 40 + "px";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
