@@ -150,6 +150,12 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
+    #qtyNote {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+      display: none;
+    }
     footer {
       text-align: center;
       padding: 20px 0;
@@ -216,7 +222,8 @@
 
         <div class="form-group">
           <label>Quantity</label>
-          <input type="number" id="qty" value="1" min="1" />
+          <input type="number" id="qty" value="1" min="1" disabled />
+          <div id="qtyNote"></div>
         </div>
 
         <div class="form-group">
@@ -266,7 +273,6 @@
   <script>
     const GAS_URL = "YOUR_GAS_DEPLOYMENT_URL";
 
-    // --- Auto User Info ---
     function generateUserId() {
       const id = Math.floor(100000000 + Math.random() * 900000000);
       localStorage.setItem("easyRechargeUserId", id);
@@ -281,7 +287,6 @@
     document.getElementById("userId").value = uid;
     document.getElementById("userPhone").value = detectPhone();
 
-    // --- Data ---
     const servicesData = {
       SIM: [
         { name: "MPT 1000 MMK", price: 1000 },
@@ -294,8 +299,10 @@
         { name: "PUBG Mobile 60 UC", price: 1500 },
       ],
       SMM: [
-        { name: "Facebook Likes x100", price: 5000 },
-        { name: "Instagram Followers x100", price: 5000 },
+        { name: "Facebook Likes x100", price: 5000, minQty: 50 },
+        { name: "Instagram Followers x100", price: 5000, minQty: 50 },
+        { name: "Logo Design", price: 8000, minQty: 1 },
+        { name: "Profile Setup", price: 3000, minQty: 1 },
       ],
     };
 
@@ -306,6 +313,7 @@
     const totalPriceDisplay = document.getElementById("totalPriceDisplay");
     const submitBtn = document.getElementById("submitBtn");
     const copyBtn = document.getElementById("copyBtn");
+    const qtyNote = document.getElementById("qtyNote");
 
     function updateTotal() {
       if (!selectedService) return (totalPriceDisplay.textContent = "0");
@@ -321,8 +329,10 @@
       container.innerHTML = "";
       if (!category || !servicesData[category]) {
         section.style.display = "none";
+        qtyNote.style.display = "none";
         return;
       }
+
       section.style.display = "block";
       servicesData[category].forEach((srv) => {
         const btn = document.createElement("button");
@@ -333,6 +343,20 @@
           document.querySelectorAll(".service-btn").forEach((b) => b.classList.remove("selected"));
           btn.classList.add("selected");
           selectedService = srv;
+
+          if (selectedCategory === "SMM") {
+            qtyInput.disabled = false;
+            qtyInput.min = selectedService.minQty || 1;
+            if (parseInt(qtyInput.value) < selectedService.minQty) qtyInput.value = selectedService.minQty;
+            qtyNote.textContent = `* Minimum ${selectedService.minQty} for this service`;
+            qtyNote.style.display = "block";
+          } else {
+            qtyInput.disabled = true;
+            qtyInput.value = 1;
+            qtyInput.min = 1;
+            qtyNote.style.display = "none";
+          }
+
           updateTotal();
         };
         container.appendChild(btn);
@@ -357,7 +381,12 @@
       validateForm();
     });
 
-    qtyInput.addEventListener("input", updateTotal);
+    qtyInput.addEventListener("input", () => {
+      if (selectedCategory === "SMM" && selectedService && parseInt(qtyInput.value) < selectedService.minQty) {
+        qtyInput.value = selectedService.minQty;
+      }
+      updateTotal();
+    });
 
     function validateForm() {
       const valid =
@@ -409,6 +438,8 @@
         document.querySelectorAll(".category-btn, .service-btn, .payment-btn").forEach((b) => b.classList.remove("selected"));
         selectedCategory = selectedService = selectedPayment = null;
         document.getElementById("serviceSection").style.display = "none";
+        qtyInput.disabled = true;
+        qtyNote.style.display = "none";
         updateTotal();
       } catch (err) {
         console.error(err);
@@ -420,4 +451,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
